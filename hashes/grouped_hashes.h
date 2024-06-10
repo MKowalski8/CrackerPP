@@ -27,11 +27,15 @@ public:
 
     size_t getHashesNumber() const { return hashes.size(); }
 
-    void erase(std::string &hash) {
+    void eraseHash(std::string &hash) {
         hashes.erase(hash);
     }
 
-    bool contains(std::string &hash) {
+    bool empty() {
+        return hashes.empty();
+    }
+
+    bool containsHash(std::string &hash) {
         if (hashes.find(hash) != hashes.end()) {
             return true;
         }

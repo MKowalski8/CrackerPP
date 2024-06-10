@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     program.add_argument("--charset")
             .help("Character set for brute-force");
 
-    program.add_argument("--max_len")
+    program.add_argument("--max-len")
             .help("Maximum length of passwords to try")
             .default_value(8)
             .scan<'i', int>();
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
     std::string wordList = program.present("--wordlist") ? program.get<std::string>("--wordlist") : "";
     bool verbose = program.get<bool>("--verbose");
 
-    int maxLen = program.get<int>("max_len");
+    int maxLen = program.get<int>("max-len");
     int numThreads = program.get<int>("threads");
     std::string hashType = program.present("--hash-type") ? program.get<std::string>("--hash-type") : "";
 
@@ -101,9 +101,9 @@ int main(int argc, char **argv) {
     } else if (mode.find("brute-force") != std::string::npos) {
         try {
             if (!hashList.empty()) {
-                attack = new BruteForce(hashList, DataSource::FILE_PATHS, hashType, maxLen);
+                attack = new BruteForce(hashList, DataSource::HASH_LIST, hashType, maxLen, charset);
             } else {
-                attack = new BruteForce(hashValue, DataSource::FILE_PATHS, hashType, maxLen);
+                attack = new BruteForce(hashValue, DataSource::STRINGS, hashType, maxLen, charset);
             }
         } catch (const std::exception &err) {
             std::cerr << err.what() << std::endl;

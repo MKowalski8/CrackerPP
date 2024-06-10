@@ -27,17 +27,19 @@ DictionaryAttack::DictionaryAttack(const std::string &hashStr, const std::string
 
 void DictionaryAttack::startAttack() {
     for (auto &hashGroup: hashes) {
-        if (!hashes.empty()) {
-            for (auto hashFunc: hashGroup.getHashFunctions()) {
-                for (const auto &word: wordlist) {
-                    std::string hashedWord = HashUtil::computeHash(word, hashFunc);
+        if (hashGroup.empty()) break;
 
-                    if (hashGroup.contains(hashedWord)) {
-                        this->addBrokenHash(BrokenHash(hashedWord, EVP_MD_name(hashFunc), word));
-                        hashGroup.erase(hashedWord);
-                    }
+        for (auto hashFunc: hashGroup.getHashFunctions()) {
+            for (const auto &word: wordlist) {
+                std::string hashedWord = HashUtil::computeHash(word, hashFunc);
+
+                if (hashGroup.containsHash(hashedWord)) {
+                    this->addBrokenHash(BrokenHash(hashedWord, EVP_MD_name(hashFunc), word));
+                    hashGroup.eraseHash(hashedWord);
+                    if (hashGroup.empty()) break;
                 }
             }
+            if (hashGroup.empty()) break;
         }
     }
 }

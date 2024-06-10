@@ -14,12 +14,16 @@ class BruteForce : public Attack {
 private:
     int maxLength;
     std::string charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                         " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+                          " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+    std::unordered_map<char, char> nextCharMap;
+
     long long possibleWordNumber;
 public:
-    BruteForce(const std::string &filePath, DataSource dataSource, const std::string &hashType, int maxLength);
+    BruteForce(const std::string &filePath, DataSource dataSource, const std::string &hashType, int maxLength,
+               const std::string &givenCharset);
 
     void startAttack() override;
+
 private:
 
     long long int totalPossibleWords();
