@@ -1,7 +1,3 @@
-//
-// Created by maks on 6/2/24.
-//
-
 #ifndef CRACKERPP_BROKEN_HASH_H
 #define CRACKERPP_BROKEN_HASH_H
 
@@ -26,6 +22,8 @@ public:
 
 
     [[nodiscard]] std::string toString() const;
+
+    [[nodiscard]] std::string forFile() const;
 };
 
 #endif //CRACKERPP_BROKEN_HASH_H

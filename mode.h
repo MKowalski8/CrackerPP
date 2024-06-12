@@ -1,7 +1,3 @@
-//
-// Created by maks on 6/12/24.
-//
-
 #ifndef CRACKER_MODE_H
 #define CRACKER_MODE_H
 

@@ -1,7 +1,3 @@
-//
-// Created by maks on 6/9/24.
-//
-
 #ifndef CRACKERPP_DATASOURCE_H
 #define CRACKERPP_DATASOURCE_H
 

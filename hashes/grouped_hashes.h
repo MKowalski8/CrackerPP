@@ -1,7 +1,3 @@
-//
-// Created by maks on 6/8/24.
-//
-
 #ifndef CRACKERPP_GROUPED_HASHES_H
 #define CRACKERPP_GROUPED_HASHES_H
 
@@ -44,6 +40,9 @@ public:
 
     std::string toString() const;
     std::string toStringVerbose() const;
+
+    std::string forFile() const;
+    std::string forFileVerbose() const;
 };
 
 

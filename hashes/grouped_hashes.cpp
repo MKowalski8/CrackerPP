@@ -1,7 +1,3 @@
-//
-// Created by maks on 6/8/24.
-//
-
 #include <iostream>
 #include <sstream>
 #include "grouped_hashes.h"
@@ -39,6 +35,30 @@ std::string GroupedHashes::toStringVerbose() const {
             ss << fmt::format(fg(fmt::color::red), "{}", EVP_MD_name(func)) << ", ";
         }
         ss << std::endl;
+    }
+    return ss.str();
+}
+
+std::string GroupedHashes::forFileVerbose() const {
+    std::stringstream ss;
+    for (const auto &hash : hashes) {
+        ss <<  hash << " - ";
+        for (const auto &func : hashFunctions) {
+            ss << EVP_MD_name(func) << ", ";
+        }
+        ss << std::endl;
+    }
+    return ss.str();
+}
+
+std::string GroupedHashes::forFile() const {
+    std::stringstream ss;
+    for (const auto &hash : hashes) {
+        if (!hashFunctions.empty()) {
+            ss << hash  << " - " << EVP_MD_name(hashFunctions[0]) << std::endl;
+        } else {
+            ss << hash << std::endl;
+        }
     }
     return ss.str();
 }

@@ -1,9 +1,5 @@
-//
-// Created by maks on 6/7/24.
-//
-
 #include "hash_identifier.h"
-#include "../file_loader.h"
+#include "../file_manager.h"
 #include <openssl/evp.h>
 #include <string>
 #include <stdexcept>
@@ -16,7 +12,7 @@
 
 
 HashIdentifier::HashIdentifier(const std::string &filePath) {
-    std::unordered_set<std::string> toClassify = FileLoader::load(filePath);
+    std::unordered_set<std::string> toClassify = FileManager::loadList(filePath);
 
     std::unordered_map<size_t, std::unordered_set<std::string>> classified;
 

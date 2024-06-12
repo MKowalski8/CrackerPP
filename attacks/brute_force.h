@@ -1,13 +1,9 @@
-//
-// Created by maks on 6/7/24.
-//
-
 #ifndef CRACKERPP_BRUTTE_FORCE_H
 #define CRACKERPP_BRUTTE_FORCE_H
 
 
 #include <string>
-#include "DataSource.h"
+#include "data_source.h"
 #include "attack.h"
 
 class BruteForce : public Attack {

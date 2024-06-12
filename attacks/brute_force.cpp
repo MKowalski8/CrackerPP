@@ -1,8 +1,4 @@
-//
-// Created by maks on 6/7/24.
-//
-
-#include "brutte_force.h"
+#include "brute_force.h"
 #include "../hashes/hash_util.h"
 #include <cmath>
 #include <iostream>
@@ -59,20 +55,6 @@ void BruteForce::generateWord(std::string &word) {
     }
     word = charset[0] + word;
 }
-
-//void BruteForce::generateWord(std::string &word) {
-//    for (int i = word.length() - 1; i >= 0; --i) {
-//        auto pos = charset.find(word[i]);
-//        if (pos != std::string::npos && pos < charset.length() - 1) {
-//            word[i] = charset[pos + 1];
-//            return;
-//        } else {
-//            word[i] = charset[0];
-//        }
-//    }
-//    word = charset[0] + word;
-//}
-
 
 
 long long BruteForce::totalPossibleWords() {

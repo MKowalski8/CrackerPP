@@ -2,9 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <functional>
-#include "../file_loader.h"
+#include "../file_manager.h"
 #include "../hashes/hash_util.h"
-#include "DataSource.h"
+#include "data_source.h"
 
 
 DictionaryAttack::DictionaryAttack(const std::string &hashStr, const std::string &wordStr, DataSource dataSource,
@@ -13,7 +13,7 @@ DictionaryAttack::DictionaryAttack(const std::string &hashStr, const std::string
     switch (dataSource) {
         case DataSource::WORD_LIST:
         case DataSource::FILE_PATHS: {
-            this->wordlist = FileLoader::load(wordStr);
+            this->wordlist = FileManager::loadList(wordStr);
             break;
         }
         case DataSource::STRINGS:

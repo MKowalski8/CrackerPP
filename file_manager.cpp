@@ -1,7 +1,3 @@
-//
-// Created by maks on 6/7/24.
-//
-
 #include <fstream>
 #include "file_manager.h"
 

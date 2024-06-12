@@ -1,7 +1,3 @@
-//
-// Created by maks on 6/7/24.
-//
-
 #ifndef CRACKERPP_FILE_LOADER_H
 #define CRACKERPP_FILE_LOADER_H
 

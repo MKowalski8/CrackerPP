@@ -26,3 +26,7 @@ std::string BrokenHash::toString() const {
                        fmt::format(fg(fmt::color::green_yellow), "{}", word),
                        fmt::format(fg(fmt::color::red), "{}\n", hashType));
 }
+
+std::string BrokenHash::forFile() const {
+    return fmt::format("{} | {} | {}", hash, word, hashType);
+}

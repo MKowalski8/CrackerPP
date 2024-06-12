@@ -1,7 +1,3 @@
-//
-// Created by maks on 6/7/24.
-//
-
 #include <tr1/unordered_map>
 #include <string>
 #include <openssl/crypto.h>
@@ -11,8 +7,7 @@
 #include <map>
 #include "../hashes/broken_hash.h"
 #include "../hashes/grouped_hashes.h"
-#include "DataSource.h"
-
+#include "data_source.h"
 #ifndef CRACKERPP_ATTACK_H
 #define CRACKERPP_ATTACK_H
 
