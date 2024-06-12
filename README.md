@@ -46,7 +46,7 @@ mode: 1 argument(s) expected. 0 provided.
 Usage: CRACKER++ [--help] [--version] [--hash-file VAR] [--hash-value VAR] [--wordlist VAR] [--word VAR] [--charset VAR] [--max-len VAR] [--threads VAR] [--hash-type VAR] [--verbose] mode
 
 Positional arguments:
-  mode              Mode: dictionary, brute or identifier 
+  mode              Mode: dictionary, brute or identifiy
 
 Optional arguments:
   -h, --help        shows help message and exits 
