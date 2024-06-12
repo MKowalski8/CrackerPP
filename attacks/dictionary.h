@@ -13,7 +13,10 @@ public:
     DictionaryAttack(const std::string &hashes, const std::string &words, DataSource dataSource,
                      const std::string &hashType);
 
-    void startAttack() override;
+    void startAttack(int threadNum) override;
+private:
+    void threadWorker(int threadId, int threadNum) override;
+
 };
 
 

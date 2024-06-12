@@ -8,6 +8,9 @@
 #include "../hashes/broken_hash.h"
 #include "../hashes/grouped_hashes.h"
 #include "data_source.h"
+#include <atomic>
+#include <mutex>
+
 #ifndef CRACKERPP_ATTACK_H
 #define CRACKERPP_ATTACK_H
 
@@ -15,20 +18,28 @@
 class Attack {
 private:
     std::vector<BrokenHash> brokenHashes;
+    std::atomic<int> operationsCompleted;
+    int totalOperations;
 
 protected:
     std::vector<GroupedHashes> hashes;
+    std::mutex mtx;
+    size_t progressCounter = 0;
+    size_t totalIterations = 0;
 
 public:
     explicit Attack(const std::string& filePath, DataSource dataSource, const std::string& hashType);
 
     [[nodiscard]] const std::vector<BrokenHash> &getBrokenHashes() const;
 
-    virtual void startAttack() {};
+    virtual void startAttack(int threadNum) {};
 
     void addBrokenHash(const BrokenHash& brokenHash){
         brokenHashes.emplace_back(brokenHash);
      }
+
+private:
+    virtual void threadWorker(int threadId, int threadCount) {};
 };
 
 #endif //CRACKERPP_ATTACK_H

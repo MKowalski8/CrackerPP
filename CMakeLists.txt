@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(OpenSSL REQUIRED)
 find_package(fmt REQUIRED)
 find_package(argparse REQUIRED)
+find_package(argparse REQUIRED)
 
 add_executable(Cracker++ main.cpp
         hashes/hash_util.h

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <thread>
 #include "../file_manager.h"
 #include "../hashes/hash_util.h"
 #include "data_source.h"
@@ -25,38 +26,51 @@ DictionaryAttack::DictionaryAttack(const std::string &hashStr, const std::string
     }
 }
 
-void DictionaryAttack::startAttack() {
-    for (auto &hashGroup: hashes) {
-        if (hashGroup.empty()) break;
+void DictionaryAttack::startAttack(int threadNum) {
+    std::vector<std::thread> threads;
 
-        for (auto hashFunc: hashGroup.getHashFunctions()) {
-            for (const auto &word: wordlist) {
-                std::string hashedWord = HashUtil::computeHash(word, hashFunc);
+    threadNum = wordlist.size()-1 < threadNum ? wordlist.size()-1 : threadNum;
 
-                if (hashGroup.containsHash(hashedWord)) {
-                    this->addBrokenHash(BrokenHash(hashedWord, EVP_MD_name(hashFunc), word));
-                    hashGroup.eraseHash(hashedWord);
-                    if (hashGroup.empty()) break;
-                }
-            }
-            if (hashGroup.empty()) break;
-        }
+    for (int i = 0; i < threadNum; ++i) {
+        threads.emplace_back(&DictionaryAttack::threadWorker, this, i, threadNum);
+    }
+
+    for (auto &thread: threads) {
+        thread.join();
     }
 }
 
 
+void DictionaryAttack::threadWorker(int threadId, int threadNum) {
+    for (auto &hashGroup: hashes) {
+        if (!hashGroup.empty()) {
+            for (auto hashFunc: hashGroup.getHashFunctions()) {
+                auto it = wordlist.begin();
+                std::advance(it, threadId);
 
-//void DictionaryAttack::applyRules(std::vector<std::string>& wordlist) {
-//    std::vector<std::string> newWords;
-//
-//    for (const auto& word : wordlist) {
-//        // Example rules: append numbers, substitute characters
-//        for (int i = 0; i < 10; ++i) {
-//            newWords.push_back(word + std::to_string(i));
-//        }
-//        // Add more rules as needed
-//    }
-//
-//    wordlist.insert(wordlist.end(), newWords.begin(), newWords.end());
-//}
 
+                while (it != wordlist.end()) {
+                    const std::string &word = *it;
+                    std::string hashedWord = HashUtil::computeHash(word, hashFunc);
+
+                    {
+                        std::lock_guard<std::mutex> lock(mtx);
+                        if (hashGroup.containsHash(hashedWord)) {
+                            this->addBrokenHash(BrokenHash(hashedWord, EVP_MD_name(hashFunc), word));
+                            hashGroup.eraseHash(hashedWord);
+                        }
+                    }
+
+
+                    for (int i = 0; i < threadNum; i++){
+                        if (it == wordlist.end()) break;
+                        it++;
+                    }
+
+                    if (hashGroup.empty()) break;
+                }
+                if (hashGroup.empty()) break;
+            }
+        }
+    }
+}

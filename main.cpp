@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
                 } else if (!hashList.empty() && !word.empty()) {
                     attack = new DictionaryAttack(hashList, word, DataSource::HASH_LIST, hashType);
                 } else if (!wordList.empty() && !hashValue.empty()) {
-                    attack = new DictionaryAttack(wordList, hashValue, DataSource::WORD_LIST, hashType);
+                    attack = new DictionaryAttack(hashValue, wordList, DataSource::WORD_LIST, hashType);
                 } else if (!word.empty()) {
                     attack = new DictionaryAttack(hashValue, word, DataSource::STRINGS, hashType);
                 } else {
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
 
 
     if (attack != nullptr) {
-        attack->startAttack();
+        attack->startAttack(numThreads);
         std::vector<BrokenHash> brokenHashes = attack->getBrokenHashes();
         std::stringstream outputStringStream;
 

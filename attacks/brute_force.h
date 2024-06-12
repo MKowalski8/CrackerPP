@@ -18,13 +18,15 @@ public:
     BruteForce(const std::string &filePath, DataSource dataSource, const std::string &hashType, int maxLength,
                const std::string &givenCharset);
 
-    void startAttack() override;
+    void startAttack(int threadNum) override;
 
 private:
 
     long long int totalPossibleWords();
 
     void generateWord(std::string &word);
+
+    void threadWorker(int threadId, int threadCount) override;
 };
 
 

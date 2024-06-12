@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <curses.h>
 #include "attack.h"
 #include "../file_manager.h"
 #include "../hashes/hash_identifier.h"

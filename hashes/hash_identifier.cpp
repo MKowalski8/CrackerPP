@@ -39,7 +39,6 @@ std::vector<const EVP_MD *> HashIdentifier::identifyHash(const std::string &hash
     if (it != hashAlgorithms.end()) {
         return it->second;
     }
-
     throw std::invalid_argument("Hash not identified");
 }
 
