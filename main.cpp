@@ -194,12 +194,13 @@ int main(int argc, char **argv) {
                 }
             }
         } else {
-            std::cout << fmt::format(fg(fmt::color::red), "\nNO HASH BROKEN");
+            std::cout << fmt::format(fg(fmt::color::red), "NO HASH BROKEN");
         }
 
         outputString = outputStringStream.str();
     }
 
+    std::cout<< std::endl;
 
     if (notSave) {
         std::cout << std::endl << outputString;
