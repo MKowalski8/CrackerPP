@@ -10,10 +10,10 @@
 BruteForce::BruteForce(const std::string &filePath, DataSource dataSource, const std::string &hashType, int maxLength,
                        const std::string &givenCharset)
         : Attack(filePath, dataSource, hashType), maxLength(maxLength) {
-    this->possibleWordNumber = totalPossibleWords();
 
     if (!givenCharset.empty()) this->charset = givenCharset;
 
+    this->possibleWordNumber = totalPossibleWords();
 
 //    Using a map for holding the charset would be more time efficient, while generating words dynamically
     for (size_t i = 0; i < charset.size(); ++i) {
@@ -23,6 +23,7 @@ BruteForce::BruteForce(const std::string &filePath, DataSource dataSource, const
 
 void BruteForce::startAttack(int threadNum) {
     std::vector<std::thread> threads;
+    totalIterations = operationsCounter();
 
     for (int i = 0; i < threadNum; ++i) {
         threads.emplace_back(&BruteForce::threadWorker, this, i, threadNum);
@@ -43,19 +44,14 @@ void BruteForce::threadWorker(int threadId, int threadCount) {
             for (int i = threadId; i < possibleWordNumber; i += threadCount) {
                 std::string hashedWord = HashUtil::computeHash(word, hashFunc);
 
-                {
-                    std::lock_guard<std::mutex> lock(mtx);
-                    if (hashGroup.containsHash(hashedWord)) {
-                        this->addBrokenHash(BrokenHash(hashedWord, EVP_MD_name(hashFunc), word));
-                        hashGroup.eraseHash(hashedWord);
-                    }
-                }
-
+                checkHash(hashGroup, hashFunc, word, hashedWord);
                 if (!hashGroup.empty()) {
                     generateWord(word);
                 } else {
                     break;
                 }
+
+                progressBar();
             }
 
             if (hashGroup.empty()) break;
@@ -63,6 +59,8 @@ void BruteForce::threadWorker(int threadId, int threadCount) {
 
     }
 }
+
+
 
 void BruteForce::generateWord(std::string &word) {
     for (int i = word.length() - 1; i >= 0; --i) {
@@ -82,4 +80,14 @@ long long BruteForce::totalPossibleWords() {
         total += std::pow(charsetLength, length);
     }
     return total;
+}
+
+size_t BruteForce::operationsCounter() {
+    int operations = 0;
+
+    for (auto &hashGroup: hashes){
+        operations += hashGroup.getHashFunctions().size() * possibleWordNumber;
+    }
+
+    return operations;
 }

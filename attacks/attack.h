@@ -18,15 +18,12 @@
 class Attack {
 private:
     std::vector<BrokenHash> brokenHashes;
-    std::atomic<int> operationsCompleted;
-    int totalOperations;
 
 protected:
     std::vector<GroupedHashes> hashes;
     std::mutex mtx;
     size_t progressCounter = 0;
     size_t totalIterations = 0;
-
 public:
     explicit Attack(const std::string& filePath, DataSource dataSource, const std::string& hashType);
 
@@ -40,6 +37,11 @@ public:
 
 private:
     virtual void threadWorker(int threadId, int threadCount) {};
+    virtual size_t operationsCounter() {return 0;};
+
+protected:
+    void progressBar();
+    void checkHash(GroupedHashes &hashGroup, const EVP_MD *hashFunc, const std::string &word, std::string &hashedWord);
 };
 
 #endif //CRACKERPP_ATTACK_H

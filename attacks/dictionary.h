@@ -16,7 +16,7 @@ public:
     void startAttack(int threadNum) override;
 private:
     void threadWorker(int threadId, int threadNum) override;
-
+    size_t operationsCounter() override;
 };
 
 

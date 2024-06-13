@@ -28,8 +28,9 @@ DictionaryAttack::DictionaryAttack(const std::string &hashStr, const std::string
 
 void DictionaryAttack::startAttack(int threadNum) {
     std::vector<std::thread> threads;
+    totalIterations = operationsCounter();
 
-    threadNum = wordlist.size()-1 < threadNum ? wordlist.size()-1 : threadNum;
+    threadNum = wordlist.size() - 1 < threadNum ? wordlist.size() - 1 : threadNum;
 
     for (int i = 0; i < threadNum; ++i) {
         threads.emplace_back(&DictionaryAttack::threadWorker, this, i, threadNum);
@@ -53,24 +54,27 @@ void DictionaryAttack::threadWorker(int threadId, int threadNum) {
                     const std::string &word = *it;
                     std::string hashedWord = HashUtil::computeHash(word, hashFunc);
 
-                    {
-                        std::lock_guard<std::mutex> lock(mtx);
-                        if (hashGroup.containsHash(hashedWord)) {
-                            this->addBrokenHash(BrokenHash(hashedWord, EVP_MD_name(hashFunc), word));
-                            hashGroup.eraseHash(hashedWord);
-                        }
-                    }
-
-
-                    for (int i = 0; i < threadNum; i++){
+                    checkHash(hashGroup, hashFunc, word, hashedWord);
+                    for (int i = 0; i < threadNum; i++) {
                         if (it == wordlist.end()) break;
                         it++;
                     }
-
+                    progressBar();
                     if (hashGroup.empty()) break;
                 }
                 if (hashGroup.empty()) break;
             }
         }
     }
+}
+
+
+size_t DictionaryAttack::operationsCounter() {
+   int operations = 0;
+
+    for (auto &hashGroup: hashes){
+        operations += hashGroup.getHashFunctions().size() * wordlist.size();
+    }
+
+    return operations;
 }

@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     program.add_argument("--hash-file", "-hl")
             .help("File containing hashes");
 
-    program.add_argument("--hash-value")
+    program.add_argument("--hash")
             .help("Single hash value");
 
     program.add_argument("--wordlist", "-w")
@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
     std::string charset = program.present("--charset") ? program.get<std::string>("--charset") : "";
     std::string word = program.present("--word") ? program.get<std::string>("--word") : "";
     std::string hashList = program.present("--hash-file") ? program.get<std::string>("--hash-file") : "";
-    std::string hashValue = program.present("--hash-value") ? program.get<std::string>("--hash-value") : "";
+    std::string hashValue = program.present("--hash") ? program.get<std::string>("--hash") : "";
     std::string wordList = program.present("--wordlist") ? program.get<std::string>("--wordlist") : "";
     bool verbose = program.get<bool>("--verbose");
 
@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
                 }
             }
         } else {
-            std::cout << fmt::format(fg(fmt::color::red), "NO HASH BROKEN");
+            std::cout << fmt::format(fg(fmt::color::red), "\nNO HASH BROKEN");
         }
 
         outputString = outputStringStream.str();
@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
 
 
     if (notSave) {
-        std::cout << outputString;
+        std::cout << std::endl << outputString;
     } else {
         FileManager::saveOutput(toFile, outputString);
     }

@@ -27,6 +27,8 @@ private:
     void generateWord(std::string &word);
 
     void threadWorker(int threadId, int threadCount) override;
+
+    size_t operationsCounter() override;
 };
 
 
